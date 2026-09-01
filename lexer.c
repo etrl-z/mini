@@ -1,4 +1,5 @@
 #include <string.h>
+#include <ctype.h>
 
 #include "lexer.h"
 
@@ -21,6 +22,15 @@ int tokenize(char *line, Token tokens[])
             count++;
 
             i += 5;
+            continue;
+        }
+
+        if (strncmp(&line[i], "if", 2) == 0)
+        {
+            tokens[count].type = TOKEN_IF;
+            count++;
+
+            i += 2;
             continue;
         }
 
@@ -66,6 +76,27 @@ int tokenize(char *line, Token tokens[])
             {
                 i++;
             }
+
+            continue;
+        }
+
+        if (isdigit(line[i]))
+        {
+            tokens[count].type = TOKEN_NUMBER;
+
+            int j = 0;
+
+            while (isdigit(line[i]))
+            {
+                tokens[count].value[j] = line[i];
+
+                i++;
+                j++;
+            }
+
+            tokens[count].value[j] = '\0';
+
+            count++;
 
             continue;
         }

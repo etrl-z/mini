@@ -30,35 +30,66 @@ int main(int argc, char *argv[])
         token_count += tokenize(line, &tokens[token_count]);
     }
 
+#pragma region log
     printf("\nTokens:\n");
 
     for (int i = 0; i < token_count; i++)
     {
         printf("Token %d: type=%d", i, tokens[i].type);
 
-        if (tokens[i].type == TOKEN_STRING)
+        if (tokens[i].type == TOKEN_STRING || tokens[i].type == TOKEN_NUMBER)
         {
             printf(", value=\"%s\"", tokens[i].value);
         }
 
         printf("\n");
     }
+#pragma endregion log
 
     int position = 0;
 
-    PrintStatement statement;
-
-    if (tokens[position].type == TOKEN_PRINT)
+    while (position < token_count)
     {
-        position++;
-
-        if (parse_print(
-                tokens,
-                &position,
-                token_count,
-                &statement))
+        // print("Hello World")
+        if (tokens[position].type == TOKEN_PRINT)
         {
-            execute_print(&statement);
+            position++;
+
+            PrintStatement statement;
+
+            if (parse_print(
+                    tokens,
+                    &position,
+                    token_count,
+                    &statement))
+            {
+                execute_print(&statement);
+            }
+        }
+
+        // if (1) print("Hello World")
+        else if (tokens[position].type == TOKEN_IF)
+        {
+            position++;
+
+            IfStatement if_statement;
+
+            if (parse_if(
+                    tokens,
+                    &position,
+                    token_count,
+                    &if_statement))
+            {
+                if (if_statement.condition)
+                {
+                    execute_print(&if_statement.body);
+                }
+            }
+        }
+        else
+        {
+            printf("Error: unexpected token\n");
+            break;
         }
     }
 

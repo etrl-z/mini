@@ -1,1 +1,6 @@
+if (1)
 print("Hello World")
+
+print("Uno")
+print("Due")
+print("Tre")
