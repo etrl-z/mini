@@ -1,0 +1,19 @@
+# Executable
+mini
+
+# Object files
+*.o
+
+# Debug files
+*.dSYM/
+
+# VS Code
+.vscode/
+
+# Temporary files
+*.swp
+*.swo
+*~
+
+# Compiled files
+*.out
